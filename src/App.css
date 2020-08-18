@@ -36,3 +36,48 @@
     transform: rotate(360deg);
   }
 }
+.card-title{
+
+cursor:pointer;
+
+
+}
+body{
+  background-color: #f7f7f7;
+}
+
+.card{
+
+  box-shadow: 3px 3px 5px 6px #ccc;
+
+}
+.card:hover{
+
+background-color:#FFE5B4;
+
+}
+.search{
+position:absolute;
+right: 0%;
+padding-top: 20px;
+
+}
+.page-link{
+  color:white;
+  cursor: pointer;
+
+}
+.nav{
+  position:absolute;
+  right:50%;
+  
+
+}
+
+.back{
+
+position:absolute;
+left: 0%;
+width:50px;
+
+}

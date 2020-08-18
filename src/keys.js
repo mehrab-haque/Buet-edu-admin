@@ -1,0 +1,6 @@
+export const keys={
+
+authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MiwiaWF0IjoxNTk3Mzg0MzI5fQ.o4Kl1bWGejMDZptKQkCv_UJpoHrxhIwbCqDxxISui4U',
+
+
+}
