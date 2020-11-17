@@ -1,8 +1,10 @@
 import React from 'react';
 import Navbar from "./components/Navbar"
 import Welcome from "./components/Welcome"
-import Topics from "./components/topics"
-import Series from "./components/Series"
+
+import AllTopics from "./components/AllTopics"
+import AllSerieses from "./components/AllSerieses"
+import AllProblems from "./components/Allproblems"
 import {BrowserRouter as Router,Route,Switch} from "react-router-dom";
 import './App.css';
 
@@ -17,10 +19,12 @@ function App() {
      <Route path='/' exact>
   
 
-     <Topics/>
+     <AllTopics/>
      </Route>
-     <Route path='/topic/:id' component={Series}/>
-
+     
+     <Route path='/allTopics' component={AllTopics}/>
+     <Route path='/allSerieses' component={AllSerieses}/>
+     <Route path='/allProblems' component={AllProblems}/>
      </Switch>
     </div>
 

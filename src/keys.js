@@ -1,6 +1,6 @@
 export const keys={
 
-authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MiwiaWF0IjoxNTk3Mzg0MzI5fQ.o4Kl1bWGejMDZptKQkCv_UJpoHrxhIwbCqDxxISui4U',
+authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJ0eXBlIjo3LCJpYXQiOjE1MTYyMzkwMjJ9.xap-9yTG2FkwB7QXXxPx2kj4bypetY7cU51sMO6D-zQ',
 
 
 }

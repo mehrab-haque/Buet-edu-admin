@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {keys} from "../keys"
-export const fetchSerieses=(dispatcher,i)=>{
-axios.get(`https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/topic/${i}`,{
+export const fetchSerieses=(dispatcher)=>{
+axios.get(`https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/getAllSeries`,{
 
 headers:{
 	'authorization':keys.authorization,

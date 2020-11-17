@@ -2,6 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {useDispatch} from "react-redux"
 import {searchText} from "../actions"
+import {Link} from "react-router-dom"
 const Navbar=()=>{
 const [search,setText]=useState("");
 const dispatch=useDispatch();
@@ -16,7 +17,16 @@ return (
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/allTopics" >Topics<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/allSerieses" >Serieses<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/allProblems" >Problems<span class="sr-only">(current)</span></a>
       </li>
      
   
