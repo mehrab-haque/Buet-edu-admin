@@ -4,6 +4,7 @@ import {keys} from "../keys"
 import axios from "axios"
 import {fetchSerieses} from "../actions/seriesAction"
 import {connect} from "react-redux"
+import Series from "./Edit/Series"
 class AllSerieses extends Component{
 state={
 
@@ -14,6 +15,8 @@ islive:"",
 nproblem:"",
 logo:"",
 topic_id:"",
+currentSeries:null,
+state:0
 
 }
 componentDidMount=()=>{
@@ -23,6 +26,19 @@ change=(e)=>{
   this.setState({
     [e.target.name]:e.target.value
   })
+}
+setCurrentSeriesToNull=()=>{
+  this.setState({currentSeries:null})
+}
+demo=(series)=>{
+
+ return (
+<div>
+  <Series series={series}/>
+</div>
+
+
+ )
 }
 submit=()=>{
   let temp={}
@@ -38,6 +54,7 @@ axios({
   }
 }).then(res=>{
   console.log(res.data)
+  alert("Topic successfully edited")
 }).catch(e=>console.log(e))
 
 
@@ -103,7 +120,8 @@ render(){
     </div>
   </div>
 </div>
-{  this.props.allserieses&&this.props.allserieses.map(series=>{
+{  this.props.allserieses&&this.props.allserieses.map((series,i)=>{
+
 return (
 <div  key={series.series_id} class="card mt-5" style={{width: '20rem',margin:"auto"}}>
   <img src={series.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
@@ -115,6 +133,14 @@ return (
   <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={'#collapse'+series.series_id}  aria-expanded="false" aria-controls="collapseExample">
      Details
   </button>
+  <button onClick={async()=>{await this.setState({currentSeries:series})}} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editSeries">
+ Edit
+</button> 
+{ this.state.currentSeries &&
+<Series series={this.state.currentSeries} setCurrentSeriesToNull={this.setCurrentSeriesToNull}/>
+}
+
+
  
 </p>
 <div class="collapse" id={'collapse'+series.series_id}>

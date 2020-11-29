@@ -2,6 +2,7 @@ import axios from "axios"
 import React,{Component} from "react"
 import {keys} from "../keys"
 import {fetchTopics} from "../actions/topicAction"
+import Topic from "./Edit/Topic"
 
 import {connect} from "react-redux"
 
@@ -17,6 +18,7 @@ state={
   lang:"",
   serial:"",
   nproblem:"",
+  currentTopic:null
 
   
 
@@ -27,6 +29,11 @@ componentDidMount=()=>{
 this.props.topics();
 
 }
+
+setCurrentTopicToNull=()=>{
+  this.setState({currentTopic:null})
+}
+
 change=(e)=>{
   this.setState({
     [e.target.name]:e.target.value
@@ -34,19 +41,6 @@ change=(e)=>{
 }
 submit=async()=>{
 
-/*t["name"]=this.state.topic_title;
-t["subject"]=this.state.topic_sub;
-t["description"]=this.state.topic_des;
-t["logo"]=this.state.topic_logo;
-t["isLive"]=this.state.topic_live.toLowerCase()==="true"?true:false;
-t["nSeries"]=this.state.topic_nSeries
-t["lang"]=this.state.topic_lang;
-t["serial"]=this.state.topic_serial
-t["nProblem"]=this.state.topic_nProblem
- await this.setState({
-  topic:t
-})*/
-//this.state["isLive"]=this.state.isLive==="true"?true:false;
 console.log(this.state);
 let temp={};
 temp["topic"]=this.state;
@@ -156,7 +150,13 @@ return (
   <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={'#collapse'+topic.topic_id}  aria-expanded="false" aria-controls="collapseExample">
      Details
   </button>
- 
+  <button onClick={()=>this.setState({currentTopic:topic})} className="btn btn-info ml-3"  data-toggle="modal" data-target="#editTopic">
+    Edit
+ </button>
+ {this.state.currentTopic &&
+  <Topic topic={this.state.currentTopic} setCurrentTopicToNull={this.setCurrentTopicToNull}/>
+
+ }
 </p>
 <div class="collapse" id={'collapse'+topic.topic_id}>
   <div class="card card-body">
