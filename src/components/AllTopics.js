@@ -1,3 +1,5 @@
+
+  
 import axios from "axios"
 import React,{Component} from "react"
 import {keys} from "../keys"
@@ -5,6 +7,7 @@ import {fetchTopics} from "../actions/topicAction"
 import Topic from "./Edit/Topic"
 
 import {connect} from "react-redux"
+import Navbar from "./Navbar"
 
 class AllTopics extends Component{
 state={
@@ -18,6 +21,7 @@ state={
   lang:"",
   serial:"",
   nproblem:"",
+  
   currentTopic:null
 
   
@@ -58,21 +62,28 @@ axios({
 
 
 }
+searchText=(text)=>{
+
+  this.props.alltopics.forEach(e=>{
+
+if(!e.name.toLowerCase().includes(text.toLowerCase())){
+document.getElementById(e.topic_id).style.display="none";
+}
+else{
+  document.getElementById(e.topic_id).style.display="block";
+}
+
+  })
+}
 
 render(){
-{
 
-  
-console.log(this.props.alltopics)
-}
     return (
+   
 <div>
 
 
-
-
-
-
+<Navbar fun={this.searchText}/>
 
 
 <button type="button" className="btn btn-outline-success btn-lg" data-toggle="modal" data-target="#exampleModalLong">
@@ -84,7 +95,7 @@ console.log(this.props.alltopics)
   <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 className="modal-title" id="exampleModalLongTitle">Topic Data</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -128,7 +139,10 @@ console.log(this.props.alltopics)
     <input onChange={this.change}  type="text" class="form-control" name="serial"/>
   </div>
  
-
+  <div class="form-group">
+    <label for="topic_level">Level</label>
+    <input type="text" class="form-control" name="level"/>
+  </div>
 </form>
       </div>
       <div className="modal-footer">
@@ -140,7 +154,7 @@ console.log(this.props.alltopics)
 </div>
 {  this.props.alltopics&&this.props.alltopics.map(topic=>{
 return (
-<div  key={topic.topic_id} class="card mt-5" style={{width: '20rem',margin:"auto"}}>
+<div  key={topic.topic_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={topic.topic_id}>
   <img src={topic.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
   <div className="card-body">
     <h2 className="card-title">{topic.name}</h2>
@@ -194,3 +208,4 @@ const mapDispatchToProps=(dispatch)=>{
   }
   
 export default connect(mapStateToProps,mapDispatchToProps)(AllTopics);
+

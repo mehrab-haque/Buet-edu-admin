@@ -70,8 +70,7 @@ post=()=>{
     <label for="topic_serial">Serial</label>
     <input onChange={this.topicChange}  value={this.state.serial} type="text" class="form-control" name="serial"/>
   </div>
- 
-
+  
 </form>
       </div>
       <div className="modal-footer">

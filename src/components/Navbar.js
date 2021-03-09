@@ -3,7 +3,8 @@ import {useState} from "react"
 import {useDispatch} from "react-redux"
 import {searchText} from "../actions"
 import {Link} from "react-router-dom"
-const Navbar=()=>{
+import Allproblems from "./Allproblems"
+const Navbar=(props)=>{
 const [search,setText]=useState("");
 const dispatch=useDispatch();
 
@@ -33,7 +34,8 @@ return (
     </ul>
     
   <form class="form-inline  my-lg-0 search" style={{paddingBottom:"20px"}}>
-<input name="search" onChange={(e)=>dispatch(searchText(e.target.value))} class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+<input name="search" onChange={(e)=>props.fun(e.target.value)} class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+ 
    </form>
   </div>
 </nav>

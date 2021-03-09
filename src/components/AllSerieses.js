@@ -5,6 +5,7 @@ import axios from "axios"
 import {fetchSerieses} from "../actions/seriesAction"
 import {connect} from "react-redux"
 import Series from "./Edit/Series"
+import Navbar from "./Navbar"
 class AllSerieses extends Component{
 state={
 
@@ -40,6 +41,19 @@ demo=(series)=>{
 
  )
 }
+searchText=(text)=>{
+
+  this.props.allserieses.forEach(e=>{
+
+if(!e.name.toLowerCase().includes(text.toLowerCase())){
+document.getElementById(e.series_id).style.display="none";
+}
+else{
+  document.getElementById(e.series_id).style.display="block";
+}
+
+  })
+}
 submit=()=>{
   let temp={}
   temp["series"]=this.state;
@@ -54,7 +68,7 @@ axios({
   }
 }).then(res=>{
   console.log(res.data)
-  alert("Topic successfully edited")
+  alert("Series successfully created");
 }).catch(e=>console.log(e))
 
 
@@ -64,7 +78,7 @@ render(){
 
     return (
 <div>
-
+<Navbar fun={this.searchText}/>
 <button type="button" className="btn btn-outline-success btn-lg" data-toggle="modal" data-target="#exampleModalLong">
  Add Series
 </button>
@@ -74,7 +88,7 @@ render(){
   <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 className="modal-title" id="exampleModalLongTitle">Series data</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -123,7 +137,7 @@ render(){
 {  this.props.allserieses&&this.props.allserieses.map((series,i)=>{
 
 return (
-<div  key={series.series_id} class="card mt-5" style={{width: '20rem',margin:"auto"}}>
+<div  key={series.series_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={series.series_id}>
   <img src={series.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
   <div className="card-body">
     <h2 className="card-title">{series.name}</h2>

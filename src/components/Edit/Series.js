@@ -9,7 +9,7 @@ name:this.props.series.name,
 logo:this.props.series.logo,
 description:this.props.series.description,
 serial:this.props.series.serial,
-//topic_id:this.props.series.topic_id,
+topic_id:this.props.series.topic_id,
 series_id:this.props.series.series_id
 
     }
@@ -22,6 +22,7 @@ series_id:this.props.series.series_id
     post=()=>{
       let temp={};
       temp["data"]=this.state;
+      console.log(temp)
       axios({
         method: 'post',
         url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editSeries',
@@ -66,7 +67,7 @@ series_id:this.props.series.series_id
  
   <div class="form-group">
     <label for="topic_id">Topic_id</label>
-    <input onChange={this.seriesChange}  value={this.props.series.topic_id} type="text" class="form-control" name="topic_id"/>
+    <input onChange={this.seriesChange}  value={this.state.topic_id} type="text" class="form-control" name="topic_id"/>
   </div>
 </form>
       </div>

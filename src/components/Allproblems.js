@@ -6,20 +6,24 @@ import {fetchProblems} from "../actions/problemAction"
 import {keys} from "../keys"
 import axios from "axios"
 import Problem from "./Edit/Problem"
+import Navbar from "./Navbar"
+var c=0;
 
 class Allproblems extends Component{
 state={
 
 structure:[],
+mainAra:[],
 category:{},
 f:[],
 confirmed:[],
 serial:"",
 series_id:"",
-currentProblem:null
+currentProblem:null,
+count:0
 
 }
-componentDidMount=()=>{
+componentDidMount=async()=>{
 
 let p=[];
 let t={};
@@ -27,6 +31,7 @@ let tempData={}
 let temp={};
 let dataTemp={};
 let mainData={}
+
     firebase.firestore().collection('problem').where("draft","==",false).get().then(docs=>{
         docs.forEach(doc=>{
             tempData={}
@@ -34,6 +39,7 @@ let mainData={}
              t={}
             dataTemp={};
             mainData={}
+            if(doc.data().interactiveType==7)
            console.log(doc.data())
             let cat=doc.data().cat.split(">")[1];
             if(cat){
@@ -48,17 +54,30 @@ let mainData={}
             }
 temp["version"]=1;
 
+if(doc.data().isPending){
+  t["isPending"]=doc.data().isPending;
+  c+=1;
+
+}
+else {
+  t["isPending"]=false;
+
+
+}
 
          t["author_id"]=doc.data().uid;
        if(doc.data().description){
         temp["description"]=doc.data().description;
+       }
+       if(doc.data().hint){
+        temp["hint"]=doc.data().hint;
        }
        t["doc_id"]=doc.id;
          temp["category"]=cat;
         t["difficulty"]=doc.data().difficulty==1?"easy":(doc.data().difficulty==2?"medium":"hard");
        temp["lang"]=doc.data().language==1?"en":"bn";
        t["title"]=doc.data().title;
-       temp["interactiveType"]=doc.data().interactiveType==1?"none":"exclusion_grid";
+       temp["interactiveType"]=doc.data().interactiveType==1?"none":doc.data().interactiveType==4?"dragAndDrop-1":doc.data().interactiveType==5?"rearrange":doc.data().interactiveType==6?"matchstick":doc.data().interactiveType==7?"venn":"exclusion_grid";
        t["timestp"]=doc.data().timestamp;
 
     t["logo"]=doc.data().logo;
@@ -122,6 +141,109 @@ else if(dataTemp.type=="text"){
 }
 
 }
+else if(temp.type=="dragAndDrop-1"){
+
+  let ques=JSON.parse(doc.data().questionnaire);
+  if(dataTemp.type=="interactive"){
+    let ans=JSON.parse(doc.data().answer);
+    mainData["temp"]=ans.items;
+    let array=[]
+ans.containers.forEach((e,idx)=>{
+let obj={};
+obj["label"]=e;
+obj["items"]=ans.schema[idx];
+array.push(obj)
+
+})
+
+mainData["answer"]=array;
+
+}
+else if(dataTemp.type=="mcq"){
+  mainData["options"]=doc.data().options;
+  mainData["answer"]=doc.data().options[doc.data().answer-1];
+
+}
+else if(dataTemp.type=="text"){
+  mainData["answer"]=doc.data().answer;
+}
+dataTemp["unselected"]=ques.items;
+
+let array=[]
+ques.containers.forEach((e,idx)=>{
+let obj={};
+obj["label"]=e;
+obj["items"]=ques.schema[idx];
+array.push(obj)
+
+})
+dataTemp["containers"]=array;
+
+}
+else if(temp.type=="rearrange"){
+  let ques=JSON.parse(doc.data().questionnaire);
+  if(dataTemp.type=="interactive"){
+    let ans=JSON.parse(doc.data().answer);
+    mainData["answer"]=ans.items;
+
+}
+else if(dataTemp.type=="mcq"){
+  mainData["options"]=doc.data().options;
+  mainData["answer"]=doc.data().options[doc.data().answer-1];
+
+}
+else if(dataTemp.type=="text"){
+  
+  mainData["answer"]=doc.data().answer;
+}
+
+dataTemp["fields"]=ques.items;
+
+}
+else if(temp.type=="matchstick"){
+  let ques=JSON.parse(doc.data().questionnaire);
+  if(dataTemp.type=="interactive"){
+    let ans=JSON.parse(doc.data().answer);
+    mainData=ans;
+}
+else if(dataTemp.type=="mcq"){
+  mainData["options"]=doc.data().options;
+  mainData["answer"]=doc.data().options[doc.data().answer-1];
+
+}
+else if(dataTemp.type=="text"){
+  
+  mainData["answer"]=doc.data().answer;
+}
+
+
+dataTemp=ques;
+dataTemp["type"]=temp.ansType;
+
+}
+else if(temp.type=="venn"){
+  let ques=JSON.parse(doc.data().questionnaire);
+  if(dataTemp.type=="interactive"){
+    let ans=JSON.parse(doc.data().answer);
+    mainData["answer"]=ans;
+}
+else if(dataTemp.type=="mcq"){
+  mainData["options"]=doc.data().options;
+  mainData["answer"]=doc.data().options[doc.data().answer-1];
+
+}
+else if(dataTemp.type=="text"){
+  
+  mainData["answer"]=doc.data().answer;
+}
+dataTemp=ques;
+dataTemp["type"]=temp.ansType;
+
+
+
+}
+
+
 dataTemp["data"]=mainData;
 temp["data"]=dataTemp;
 
@@ -130,15 +252,24 @@ t["data"]=temp;
 
         })
     })
- 
-this.setState({structure:p})
+    
+await this.setState({structure:p,
+count:c
+})
+console.log(c)
+
     }
-    click=()=>{
+click=async()=>{
         console.log((this.state.structure))
-        this.setState({
-            f:this.state.structure
+        await this.setState({
+            f:this.state.structure,
+            mainAra:this.state.structure
         })
     
+        this.state.f.forEach(e=>{
+
+          document.getElementById(e.doc_id).style.display="block"
+        })
     console.log(this.state.structure)
     }
     disapprove=(id)=>{
@@ -155,8 +286,60 @@ this.setState({structure:p})
   }
 
      
-approve=(id,prob)=>{
+delete=(id,doc_id)=>{
+  let data={};
+  data["problem_id"]=id;
+  axios({
+    method: 'post',
+    url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/deleteProblem',
+    data: data,
+    headers:{
+      'authorization':keys.authorization,
+    }
+  }).then(res=>{
 
+console.log(res.data);
+firebase.firestore().collection("problem").doc(doc_id).update({
+  isApproved:false,
+
+
+})
+alert("Problem deleted");
+
+  })
+}
+
+searchText=(text)=>{
+let temp=[];
+ 
+  this.state.mainAra.forEach(e=>{
+    if(text=="waiting"){
+
+      if(e.isPending){
+
+        temp.push(e);
+      }
+      else{
+        
+      }
+      
+        }else{
+if(e.title.toLowerCase().includes(text.toLowerCase())){
+//document.getElementById(e.doc_id).style.transform = "rotate(45deg)";;
+
+
+temp.push(e);
+
+}
+else{
+ 
+}
+
+  }}
+  
+  )
+
+  this.setState({f:temp})
 }
 submit=(prob,id)=>{
 let temp={};
@@ -179,7 +362,8 @@ axios({
         isApproved:true,
         series_id:this.state.series_id,
         serial:this.state.serial,
-        prob_id:res.data.id
+        prob_id:res.data.id,
+        isPending:false
 
     })
   }).catch(e=>console.log(e))
@@ -194,37 +378,46 @@ axios({
 return (
   
 <div >
+<Navbar fun={this.searchText}/>
+
+
+<p onClick={()=>this.searchText("waiting")}>Waiting Queue({c})</p>
     <button className="btn btn-dark my-3" onClick={this.click}>Load Problems</button>
  
 {  this.state.f.map(prob=>{
 return (
-<div  key={prob.doc_id} class="card mt-5" style={{width: '20rem',margin:"auto"}}>
+<div  key={prob.doc_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={prob.doc_id}>
   <img src={prob.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
   <div className="card-body">
     <h2 className="card-title">{prob.title}</h2>
-    <p class="card-text">Timestamp :{prob.timestp}</p>
+    <p class="card-text" >Timestamp :{prob.timestp}</p>
+
+    <p class="card-text" id={"pendingText"+prob.doc_id} style={{color:'red'}} >{prob.isPending?"Pending":''}</p>
     <p>
 
   <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={'#collapse'+prob.doc_id}  aria-expanded="false" aria-controls="collapseExample">
      Details
   </button>
-  <button onClick={()=>this.setState({currentProblem:prob})} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editProblem">
+  <button onClick={async()=> await this.setState({currentProblem:prob})} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editProblem">
  Edit
 </button>
-{this.state.currentProblem&&
-  <Problem problem={this.state.currentProblem} setCurrentProbToNull={this.setCurrentProbToNull}/>
+{this.state.currentProblem &&
+    <Problem problem ={this.state.currentProblem} setCurrentProbToNull={this.setCurrentProbToNull}/>
+  
+
+  
 }
 
 
   {prob.islive?
-  <button className="btn btn-danger ml-3 pl-3 disabled=''" >Approve</button>:
+  <button onClick={()=>this.delete(prob.prob_id,prob.doc_id)} className="btn btn-danger ml-3 pl-3">Delete</button>:
   (<button className="btn btn-success ml-3 pl-3" type="button" data-toggle="collapse" data-target={'#collapse2'+prob.doc_id}  aria-expanded="false" aria-controls="collapseExample" >Approve</button>)
   }
 </p>
 <div class="collapse" id={'collapse'+prob.doc_id}>
   <div class="card card-body">
-<h4>AnsType : {prob.ansType}</h4>
-<h4>InteractiveType : {prob.interactiveType}</h4>
+<h4>AnsType :{prob.data.ansType}</h4>
+<h4>InteractiveType : {prob.data.interactiveType}</h4>
  <h6>Status : {prob.islive?'Approved':'Not Approved'}</h6>
   <h6>Grade : {prob.grade}</h6>
 <h6>ProblemId {prob.prob_id}</h6>
@@ -259,8 +452,9 @@ return (
 
 })}
 <div>
-    <button className="btn btn-primary" onClick={this.confirm}>Post</button>
+  
 </div>
+
 </div>
 	)
 
