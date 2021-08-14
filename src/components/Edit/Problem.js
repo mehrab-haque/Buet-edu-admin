@@ -11,6 +11,8 @@ serial:this.props.problem.serial,
 series_id:this.props.problem.series_id,
 title:this.props.problem.title,
 difficulty:this.props.problem.difficulty,
+isPremium:this.props.problem.isPremium,
+isLive:this.props.problem.isLive
 
 
 
@@ -32,6 +34,8 @@ difficulty:this.props.problem.difficulty,
         temp["problem_id"]=temp["prob_id"];
         temp["title"]=this.state.title;
         temp["difficulty"]=this.state.difficulty;
+        temp["isPremium"]=this.state.isPremium;
+        temp["islive"]=this.state.isLive;
        
         
         final["problem"]=temp;
@@ -52,7 +56,9 @@ difficulty:this.props.problem.difficulty,
           difficulty:this.state.difficulty,
           serial:this.state.serial,
           series_id:this.state.series_id,
-          isPending:false
+          isPending:false,
+          isPremium:this.state.isPremium,
+          isLive:this.state.isLive
          
 
 
@@ -102,7 +108,43 @@ difficulty:this.props.problem.difficulty,
     <label for="Difficulty">Difficulty</label>
     <input onChange={this.problemChange}  value={this.state.difficulty} type="text" class="form-control" name="difficulty"/>
   </div>
+{this.state.isPremium?
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({isPremium:!this.state.isPremium})} class="form-check-input" type="checkbox" value={this.state.isPremium} id="flexCheckDefault" checked />
+  <label class="form-check-label" for="flexCheckDefault">
+    Premium
+  </label>
+</div>  
+):
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({isPremium:!this.state.isPremium})} class="form-check-input" type="checkbox" value={this.state.isPremium} id="flexCheckDefault" />
+  <label class="form-check-label" for="flexCheckDefault">
+    Premium
+  </label>
+</div>  
+)
+}
 
+{this.state.isLive?
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({isLive:!this.state.isLive})} class="form-check-input" type="checkbox" value={this.state.isLive} id="flexCheckDefault2" checked />
+  <label class="form-check-label" for="flexCheckDefault2">
+    IsLive
+  </label>
+</div>  
+):
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({isLive:!this.state.isLive})} class="form-check-input" type="checkbox" value={this.state.isLive} id="flexCheckDefault2" />
+  <label class="form-check-label" for="flexCheckDefault2">
+    IsLive
+  </label>
+</div>  
+)
+}
     
   
 </form>

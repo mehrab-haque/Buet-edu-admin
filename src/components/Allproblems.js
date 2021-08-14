@@ -20,7 +20,8 @@ confirmed:[],
 serial:"",
 series_id:"",
 currentProblem:null,
-count:0
+count:0,
+width:''
 
 }
 componentDidMount=async()=>{
@@ -39,6 +40,8 @@ let mainData={}
              t={}
             dataTemp={};
             mainData={}
+            if(doc.data().width)
+            this.setState({width:doc.data().width})
             if(doc.data().interactiveType==7)
            console.log(doc.data())
             let cat=doc.data().cat.split(">")[1];
@@ -77,7 +80,7 @@ else {
         t["difficulty"]=doc.data().difficulty==1?"easy":(doc.data().difficulty==2?"medium":"hard");
        temp["lang"]=doc.data().language==1?"en":"bn";
        t["title"]=doc.data().title;
-       temp["interactiveType"]=doc.data().interactiveType==1?"none":doc.data().interactiveType==4?"dragAndDrop-1":doc.data().interactiveType==5?"rearrange":doc.data().interactiveType==6?"matchstick":doc.data().interactiveType==7?"venn":"exclusion_grid";
+       temp["interactiveType"]=doc.data().interactiveType==1?"none":doc.data().interactiveType==3?"dragAndDrop-2":doc.data().interactiveType==4?"dragAndDrop-1":doc.data().interactiveType==5?"rearrange":doc.data().interactiveType==6?"matchstick":doc.data().interactiveType==7?"venn":doc.data().interactiveType==8?"dragAndDrop-3-Grid":"exclusion_grid";
        t["timestp"]=doc.data().timestamp;
 
     t["logo"]=doc.data().logo;
@@ -132,6 +135,7 @@ if(dataTemp.type=="interactive"){
 mainData["answer"]=ans.state;
 
 }
+
 else if(dataTemp.type=="mcq"){
 mainData["options"]=doc.data().options;
 mainData["answer"]=doc.data().options[doc.data().answer-1];
@@ -139,6 +143,19 @@ mainData["answer"]=doc.data().options[doc.data().answer-1];
 else if(dataTemp.type=="text"){
     mainData["answer"]=doc.data().answer;
 }
+
+}
+else if(temp.type==="dragAndDrop-2"){
+  let ques=JSON.parse(doc.data().questionnaire);
+  if(dataTemp.type=="mcq"){
+    mainData["options"]=doc.data().options;
+    mainData["answer"]=doc.data().options[doc.data().answer-1];
+  
+  }
+  else if(dataTemp.type=="text"){
+    mainData["answer"]=doc.data().answer;
+  }
+temp["questionnaire"]=ques;
 
 }
 else if(temp.type=="dragAndDrop-1"){
@@ -177,6 +194,53 @@ obj["items"]=ques.schema[idx];
 array.push(obj)
 
 })
+dataTemp["containers"]=array;
+
+}
+
+else if(temp.type==='dragAndDrop-3-Grid'){
+
+
+  let ques=JSON.parse(doc.data().questionnaire);
+  console.log(ques);
+  if(dataTemp.type=="interactive"){
+    let ans=JSON.parse(doc.data().answer);
+    mainData["temp"]=ans.items;
+    let array=[]
+ans.containers.forEach((e,idx)=>{
+let obj={};
+obj["label"]=e;
+obj["items"]=ans.schema[idx];
+
+array.push(obj)
+
+})
+
+mainData["answer"]=array;
+
+}
+else if(dataTemp.type=="mcq"){
+  mainData["options"]=doc.data().options;
+  mainData["answer"]=doc.data().options[doc.data().answer-1];
+
+}
+else if(dataTemp.type=="text"){
+  mainData["answer"]=doc.data().answer;
+}
+dataTemp["unselected"]=ques.items;
+
+let array=[]
+ques.containers.forEach((e,idx)=>{
+let obj={};
+obj["label"]=e;
+obj["items"]=ques.schema[idx];
+array.push(obj)
+
+})
+dataTemp["active"]=ques.active;
+dataTemp["nCols"]=ques.nCols;
+dataTemp["nRows"]=ques.nRows;
+
 dataTemp["containers"]=array;
 
 }
@@ -246,8 +310,10 @@ dataTemp["type"]=temp.ansType;
 
 dataTemp["data"]=mainData;
 temp["data"]=dataTemp;
-
+temp["width"]=this.state.width
 t["data"]=temp;
+t["isLive"]=doc.data().isLive!==null?doc.data().isLive:true;
+t["isPremium"]=doc.data().isPremium!==null?doc.data().isPremium:true;
     p.push(t);
 
         })
@@ -341,9 +407,12 @@ else{
 
   this.setState({f:temp})
 }
+
+
 submit=(prob,id)=>{
 let temp={};
 prob["serial"]=this.state.serial;
+
 prob["series_id"]=this.state.series_id;
 prob["islive"]=true;
 temp["problem"]=prob;
@@ -381,16 +450,16 @@ return (
 <Navbar fun={this.searchText}/>
 
 
-<p onClick={()=>this.searchText("waiting")}>Waiting Queue({c})</p>
+<p style={{cursor:'pointer'}} onClick={()=>this.searchText("waiting")}>Waiting Queue({c})</p>
     <button className="btn btn-dark my-3" onClick={this.click}>Load Problems</button>
  
-{  this.state.f.map(prob=>{
+{  this.state.f.map((prob,idx)=>{
 return (
 <div  key={prob.doc_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={prob.doc_id}>
   <img src={prob.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
   <div className="card-body">
     <h2 className="card-title">{prob.title}</h2>
-    <p class="card-text" >Timestamp :{prob.timestp}</p>
+    <p class="card-text" >Prob no -{idx}</p>
 
     <p class="card-text" id={"pendingText"+prob.doc_id} style={{color:'red'}} >{prob.isPending?"Pending":''}</p>
     <p>

@@ -6,6 +6,7 @@ import {fetchSerieses} from "../actions/seriesAction"
 import {connect} from "react-redux"
 import Series from "./Edit/Series"
 import Navbar from "./Navbar"
+import {Link} from "react-router-dom"
 class AllSerieses extends Component{
 state={
 
@@ -17,11 +18,21 @@ nproblem:"",
 logo:"",
 topic_id:"",
 currentSeries:null,
-state:0
+state:0,
+serieses:[]
 
 }
 componentDidMount=()=>{
   this.props.serieses();
+ 
+ setTimeout(this.setSeries,1000) 
+}
+
+setSeries=()=>{
+  this.setState({
+    serieses:this.props.allserieses
+  })
+
 }
 change=(e)=>{
   this.setState({
@@ -41,24 +52,31 @@ demo=(series)=>{
 
  )
 }
-searchText=(text)=>{
+submitNProblem=(id)=>{
+ let  temp={
+series_id:id,
+nproblem:this.state.nproblem
+  }
+  axios({
+    method: 'post',
+    url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editSeriesProblemCount',
+    data: temp,
+    headers:{
+      'authorization':keys.authorization,
+    }
+  }).then(res=>{
+    console.log(res.data);
+    alert("Successfully edited nproblem");
+  
+  }).catch(e=>console.log(e))
 
-  this.props.allserieses.forEach(e=>{
 
-if(!e.name.toLowerCase().includes(text.toLowerCase())){
-document.getElementById(e.series_id).style.display="none";
-}
-else{
-  document.getElementById(e.series_id).style.display="block";
-}
-
-  })
 }
 submit=()=>{
   let temp={}
   temp["series"]=this.state;
  
-console.log(temp)
+
 axios({
   method: 'post',
   url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/addSeries',
@@ -67,19 +85,40 @@ axios({
     'authorization':keys.authorization,
   }
 }).then(res=>{
-  console.log(res.data)
-  alert("Series successfully created");
+  console.log(res.data);
+  alert("Successfully created");
+
 }).catch(e=>console.log(e))
 
 
 
 }
+searchText=(text)=>{
+let temp=[];
+
+  this.props.allserieses.forEach(e=>{
+
+
+if(e.name.toLowerCase().includes(text.toLowerCase())){
+//document.getElementById(e.series_id).style.display="none";
+temp.push(e);
+}
+// else{
+//   document.getElementById(e.series_id).style.display="block";
+// }
+
+this.setState({
+serieses:temp
+})
+
+  })
+}
 render(){
 
     return (
 <div>
-<Navbar fun={this.searchText}/>
-<button type="button" className="btn btn-outline-success btn-lg" data-toggle="modal" data-target="#exampleModalLong">
+<Navbar fun={this.searchText}/> 
+<button type="button" className="btn btn-outline-success btn-lg mt-3" data-toggle="modal" data-target="#exampleModalLong">
  Add Series
 </button>
 
@@ -88,7 +127,7 @@ render(){
   <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="exampleModalLongTitle">Series data</h5>
+        <h5 className="modal-title" id="exampleModalLongTitle">Modal title</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -134,7 +173,7 @@ render(){
     </div>
   </div>
 </div>
-{  this.props.allserieses&&this.props.allserieses.map((series,i)=>{
+{  this.state.serieses && this.state.serieses.map((series,i)=>{
 
 return (
 <div  key={series.series_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={series.series_id}>
@@ -150,6 +189,16 @@ return (
   <button onClick={async()=>{await this.setState({currentSeries:series})}} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editSeries">
  Edit
 </button> 
+<button type="button" className="btn btn-primary ml-3" data-toggle="collapse" data-target={'#collapse2'+series.series_id}>
+ nProblems
+</button> 
+<Link to={{
+  pathname: `/addTutorial/${series.series_id}`,
+ 
+}}>
+<button type="button" className="btn btn-primary ml-1 mt-4" >
+Add Tutorial
+</button> </Link>
 { this.state.currentSeries &&
 <Series series={this.state.currentSeries} setCurrentSeriesToNull={this.setCurrentSeriesToNull}/>
 }
@@ -164,6 +213,16 @@ return (
 
   <h5>Serial: {series.serial}</h5>
 
+  <h5>Series Id: {series.series_id} </h5>
+
+
+  </div>
+</div>
+
+<div class="collapse" id={'collapse2'+series.series_id}>
+<div class="card card-body">
+<input onChange={(e)=>this.setState({nproblem:e.target.value})} placeholder="Enter no of problems" type="text" class="form-control" name="nProblem" />
+<button onClick={()=>this.submitNProblem(series.series_id)} className="btn btn-primary py-3 my-3" >Submit</button>
 
   </div>
 </div>

@@ -9,7 +9,8 @@ name:this.props.topic.name,
 logo:this.props.topic.logo,
 description:this.props.topic.description,
 serial:this.props.topic.serial,
-topic_id:this.props.topic.topic_id
+topic_id:this.props.topic.topic_id,
+color:this.props.topic.color?this.props.topic.color:""
 
     }
     topicChange=(e)=>{
@@ -70,7 +71,10 @@ post=()=>{
     <label for="topic_serial">Serial</label>
     <input onChange={this.topicChange}  value={this.state.serial} type="text" class="form-control" name="serial"/>
   </div>
-  
+   <div class="form-group">
+    <label for="color">Color code</label>
+    <input onChange={this.topicChange}  value={this.state.color} type="text" class="form-control" name="color"/>
+  </div>
 </form>
       </div>
       <div className="modal-footer">
