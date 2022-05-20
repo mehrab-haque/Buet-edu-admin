@@ -5,11 +5,12 @@ import React,{Component} from "react"
 import {keys} from "../keys"
 import {fetchTopics} from "../actions/topicAction"
 import Topic from "./Edit/Topic"
-
+import { useHistory } from "react-router-dom";
 import {connect} from "react-redux"
 import Navbar from "./Navbar"
 
 class AllTopics extends Component{
+
 state={
 
   name:"",
@@ -25,21 +26,43 @@ state={
   level_des:"",
   level:"",
   topics:[],
-  currentTopic:null
+  tempTopics:[],
+  currentTopic:null,
+  lang:'en'
 
   
 
 
 }
+getLang=(e)=>{
+  this.setState({
+    topics:[]
+  })
+if(e.target.checked){
+
+//this.getTopics('bn');
+this.setState({lang:'bn'});
+
+}
+else{
+//this.getTopics('en');
+console.log('en');
+this.setState({lang:'en'});
+}
+
+}
+getTopics=(slug)=>{
+
+
+}
 componentDidMount=()=>{
+//if(this.state.lang=='en' || this.state.lang="")
+//this.getTopics('en');
 
-this.props.topics();
-
-setTimeout(this.setTopics,1000)
 }
 setTopics=()=>{
   this.setState({
-    topics:this.props.alltopics
+    topics:this.tempTopics
   })
 }
 
@@ -80,6 +103,25 @@ else{
 }
 
 }
+loadTopics=()=>{
+
+axios.get('https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/topics/'+this.state.lang,{
+
+headers:{
+	'authorization':keys.authorization,
+
+}
+
+}).then(res=>{
+ this.setState({
+    topics:res.data,
+
+  })
+	console.log(res.data)
+}).catch(e=>console.log(e))
+//this.setTopics();
+}
+
 submit=async()=>{
 
 console.log(this.state);
@@ -179,6 +221,13 @@ render(){
 <button type="button" className="btn btn-outline-success btn-lg ml-5 my-3" data-toggle="modal" data-target="#exampleModalLong2">
  Add Level
 </button>
+<div class="form-check form-switch">
+ <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" onChange={this.getLang}/>
+ <label class="form-check-label" for="flexSwitchCheckDefault">Bangla</label>
+</div>
+<button type="button" onClick={this.loadTopics} className="btn btn-outline-primary btn-lg my-3 mx-3" data-toggle="modal" data-target="#exampleModalLong3">
+ Get Topics
+</button>
 
 <div className="modal fade" id="exampleModalLong2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div className="modal-dialog" role="document">
@@ -273,10 +322,11 @@ render(){
 </div>
 {  this.state.topics &&this.state.topics.map(topic=>{
 return (
-<div  key={topic.topic_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={topic.topic_id}>
+<div>
+<div  key={topic.topic_id} class="card mt-5" style={{width: '20rem',margin:"auto"}} id={topic.topic_id} >
   <img src={topic.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..."/>
   <div className="card-body">
-    <h2 className="card-title">{topic.name}</h2>
+   <a style={{textDecoration:"none"}} href={'/topics/'+topic.topic_id}> <h2 className="card-title">{topic.name}({this.state.lang})</h2></a>
     <p class="card-text">{topic.description}</p>
     <p>
 
@@ -328,7 +378,7 @@ return (
 
   </div>
 </div>
-
+</div>
 )
 
 })}
@@ -342,7 +392,7 @@ return (
 }
 const mapDispatchToProps=(dispatch)=>{
   return {
-     topics:async()=>await fetchTopics(dispatch)
+     topics:async(slug)=>await fetchTopics(dispatch,slug)
   }
   }
   const mapStateToProps=(state)=>{

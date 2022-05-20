@@ -7,12 +7,15 @@ class Problem extends Component{
     state={
 
 grade:this.props.problem.grade,
+desc:this.props.problem.data.description,
 serial:this.props.problem.serial,
 series_id:this.props.problem.series_id,
 title:this.props.problem.title,
 difficulty:this.props.problem.difficulty,
 isPremium:this.props.problem.isPremium,
-isLive:this.props.problem.isLive
+isLive:this.props.problem.isLive||this.props.problem.islive,
+statement:this.props.problem.data.statement,
+explanation:this.props.problem.data.explanation,
 
 
 
@@ -31,18 +34,17 @@ isLive:this.props.problem.isLive
         temp["serial"]=this.state.serial;
         temp["grade"]=this.state.grade;
         temp["series_id"]=this.state.series_id;
-        temp["problem_id"]=temp["prob_id"];
+        temp["problem_id"]=temp["prob_id"] ? temp["prob_id"]:temp["problem_id"];
         temp["title"]=this.state.title;
         temp["difficulty"]=this.state.difficulty;
         temp["isPremium"]=this.state.isPremium;
         temp["islive"]=this.state.isLive;
-       
-        
+      
         final["problem"]=temp;
        console.log(final)
        axios({
         method: 'post',
-        url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editProblem',
+        url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editProblem',
         data: final,
         headers:{
           'authorization':keys.authorization,
@@ -57,9 +59,9 @@ isLive:this.props.problem.isLive
           serial:this.state.serial,
           series_id:this.state.series_id,
           isPending:false,
-          isPremium:this.state.isPremium,
-          isLive:this.state.isLive
-         
+          isPremium:this.state.isPremium?this.state.isPremium:false,
+          isLive:this.state.isLive,
+         islive:true
 
 
   
@@ -99,11 +101,19 @@ isLive:this.props.problem.isLive
     <input onChange={this.problemChange} value={this.state.series_id} type="text" class="form-control" name="series_id"/>
   </div>
 
-  <div class="form-group">
-    <label for="grade">Grade</label>
-    <input onChange={this.problemChange}  value={this.state.grade} type="text" class="form-control" name="grade"/>
-  </div>
-  
+{this.props.problem.translated==true||this.props.problem.translated==false?  <div class="form-group">
+    <label for="grade">Description</label>
+    <input onChange={this.problemChange}  value={this.state.desc} type="text" class="form-control" name="description"/>
+  </div>:null}
+
+  {this.props.problem.translated==true||this.props.problem.translated==false?  <div class="form-group">
+    <label for="grade">Explanation</label>
+    <input onChange={this.problemChange}  value={this.state.explanation} type="text" class="form-control" name="explanation"/>
+  </div>:null}
+{this.props.problem.translated==true||this.props.problem.translated==false?  <div class="form-group">
+    <label for="grade">Statement</label>
+    <input onChange={this.problemChange}  value={this.state.statement} type="text" class="form-control" name="statement"/>
+  </div>:null}
   <div class="form-group">
     <label for="Difficulty">Difficulty</label>
     <input onChange={this.problemChange}  value={this.state.difficulty} type="text" class="form-control" name="difficulty"/>

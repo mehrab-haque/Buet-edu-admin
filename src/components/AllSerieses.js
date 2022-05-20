@@ -23,9 +23,7 @@ serieses:[]
 
 }
 componentDidMount=()=>{
-  this.props.serieses();
  
- setTimeout(this.setSeries,1000) 
 }
 
 setSeries=()=>{
@@ -79,7 +77,7 @@ submit=()=>{
 
 axios({
   method: 'post',
-  url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/addSeries',
+  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addSeries',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -122,7 +120,11 @@ render(){
  Add Series
 </button>
 
-
+<button type="button" className="btn btn-success btn-lg mt-3 ml-3" onClick={()=>{ this.props.serieses();
+ 
+ setTimeout(this.setSeries,2000) }} >
+Load Serieses
+</button>
 <div className="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div className="modal-dialog" role="document">
     <div className="modal-content">

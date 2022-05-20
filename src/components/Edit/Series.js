@@ -25,7 +25,7 @@ series_id:this.props.series.series_id
       console.log(temp)
       axios({
         method: 'post',
-        url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editSeries',
+        url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editSeries',
         data: temp,
         headers:{
           'authorization':keys.authorization,
