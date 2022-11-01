@@ -29,7 +29,9 @@ return (
       <li class="nav-item active">
         <a class="nav-link" href="/allProblems" >Problems<span class="sr-only">(current)</span></a>
       </li>
-     
+      <li class="nav-item active">
+        <a class="nav-link" href="/allTests" >Tests<span class="sr-only">(current)</span></a>
+      </li>
   
     </ul>
     

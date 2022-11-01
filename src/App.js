@@ -5,6 +5,7 @@ import Welcome from "./components/Welcome"
 import AllTopics from "./components/AllTopics"
 import AllSerieses from "./components/AllSerieses"
 import AllProblems from "./components/Allproblems"
+import AllTests from "./components/AllTests"
 import {BrowserRouter as Router,Route,Switch} from "react-router-dom";
 import Tutorial from "./components/Tutorial"
 import SeriesByTopic from "./components/SeriesByTopic"
@@ -33,6 +34,7 @@ function App() {
      <Route path='/topics/:id' component= {SeriesByTopic}/>
     <Route path='/series/:id' component= {ProblemBySeries}/>
      <Route path='/problem/:id' component= {ProblemEdit}/>
+     <Route path ='/allTests' component={AllTests}/>
      </Switch>
     </div>
 

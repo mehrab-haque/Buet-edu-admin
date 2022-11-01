@@ -32,8 +32,10 @@ class ProblemEdit extends Component {
     hints: "",
     innerData:this.props.location.myProps?this.props.location.myProps.problem.data.data:"",
     finalInnerData:this.props.location.myProps?this.props.location.myProps.problem.data.data:"",
-    loading:0
-
+    loading:0,
+    data:"",
+    questionnaire:this.props.location.myProps?this.props.location.myProps.problem.data.questionnaire:""
+    
 
 
   }
@@ -123,6 +125,14 @@ class ProblemEdit extends Component {
     
    await  this.setState({ finalInnerData:v})
   }
+  handleChange2 = async(v)  =>{
+
+  
+    
+   await  this.setState({ questionnaire:v})
+  }
+
+
   submit = async() => {
 await this.setState({loading:1})
     let tempRes = this.state.restrictions.split("|");
@@ -144,6 +154,8 @@ await this.setState({loading:1})
     temp["data"]["restriction"] = tempRes;
     temp["data"]["hint"] = tempHint;
     temp["data"]["data"]=this.state.finalInnerData;
+    if(this.state.questionnaire)
+    temp["data"]["questionnaire"]=this.state.questionnaire;
     final["problem"] = temp;
    
     console.log(final)
@@ -221,6 +233,12 @@ await this.setState({loading:1})
           <Editor
         value={this.state.innerData}
         onChange={this.handleChange}
+        ace={ace}
+        theme="ace/theme/github"
+/>
+<Editor
+        value={this.state.questionnaire}
+        onChange={this.handleChange2}
         ace={ace}
         theme="ace/theme/github"
 />

@@ -25,8 +25,10 @@ class Allproblems extends Component {
     count: 0,
     width: '',
     lang: "en",
-    loading:0,
-    bnLoading:0
+    loading: 0,
+    bnLoading: 0,
+    mapped_id: "",
+    setters:[]
 
   }
   componentDidMount = async () => {
@@ -37,9 +39,19 @@ class Allproblems extends Component {
     let temp = {};
     let dataTemp = {};
     let mainData = {}
+   await  firebase.firestore().collection('profile').get().then(docs => {
+      docs.forEach(doc => {
+        this.setState(prevState => ({
+          setters: [...prevState.setters,{data:doc.data(),id:doc.id}]
+        }))   
+
+})
+      
+    })
 
     firebase.firestore().collection('problem').where("draft", "==", false).get().then(docs => {
       docs.forEach(doc => {
+        
         tempData = {}
         temp = {};
         t = {}
@@ -51,10 +63,12 @@ class Allproblems extends Component {
 
         let cat = doc.data().cat.split(">")[1];
         if (cat) {
+          
           if (!(this.state.category.hasOwnProperty(cat.toLowerCase())))
             this.state.category[cat.toLowerCase()] = Object.keys(this.state.category).length + 1;
         }
         else {
+      
           cat = doc.data().cat.toLowerCase();
           if (!(this.state.category.hasOwnProperty(doc.data().cat.toLowerCase())))
             this.state.category[doc.data().cat.toLowerCase()] = Object.keys(this.state.category).length + 1;
@@ -74,9 +88,12 @@ class Allproblems extends Component {
         }
 
         t["author_id"] = doc.data().uid;
+    
+        t["setter_name"]=this.getName(doc.data().uid);
         if (doc.data().description) {
           temp["description"] = doc.data().description;
         }
+        temp["latex"]=doc.data().latex?doc.data().latex:"";
         if (doc.data().hint) {
           temp["hint"] = doc.data().hint;
         }
@@ -327,6 +344,7 @@ class Allproblems extends Component {
         t["data"] = temp;
         t["isLive"] = doc.data().isLive !== null || doc.data().isLive !== undefined ? doc.data().isLive : true;
         t["isPremium"] = doc.data().isPremium !== null ? doc.data().isPremium : true;
+   
         p.push(t);
 
       })
@@ -339,10 +357,21 @@ class Allproblems extends Component {
 
 
   }
-
+getName= (id) =>{
+  let name;
+  this.state.setters.map(s=>{
+    
+  if(s.id==id){
+   
+    name=s.data.name;
+    
+  }
+ })
+ return name;
+}
   click = async () => {
-    await this.setState({loading:1})
-     this.setState({
+    await this.setState({ loading: 1 })
+    this.setState({
       f: this.state.structure,
       mainAra: this.state.structure
     })
@@ -351,13 +380,49 @@ class Allproblems extends Component {
 
       document.getElementById(e.doc_id).style.display = "block"
     },
-   async () =>{ await this.setState({loading:0})}
+      async () => { await this.setState({ loading: 0 }) }
     )
 
   }
 
-  bnclick = async() => {
-await this.setState({bnLoading:1})
+  go=(prob)=>{
+
+   let level=prob.level_id-5;
+
+let link=`https://brainspark-inner.netlify.app/lang/en/level/${level}/series/${prob.series_id}/problem/${prob.serial}`
+console.log(link);
+const dom=document.getElementById("prob_link");;
+dom.href=link;
+dom.click();
+  }
+  editMappedProblem=async (prob)=>{
+
+
+let id1=prob.prob_id?prob.prob_id:prob.problem_id;
+
+let id2=parseInt(this.state.mapped_id);
+let data={problem_id_1:id1,problem_id_2:id2};
+
+
+axios({
+  method: 'post',
+  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/associate/create',
+  data: data,
+  headers: {
+    'authorization': keys.authorization,
+  }
+}).then(res=>{
+  alert("Problem mapping successful");
+
+}).catch(e=>{
+  console.log(e);
+})
+
+  }
+
+  bnclick = async () => {
+    await this.setState({ bnLoading: 1 })
+   
 
     axios({
       method: 'get',
@@ -366,11 +431,11 @@ await this.setState({bnLoading:1})
       headers: {
         'authorization': keys.authorization,
       }
-    }).then(res => {  this.setState({bnLoading:0});this.setState({ f: res.data });  })
-      .catch(e => {  this.setState({bnLoading:0});console.log(e)})
+    }).then(res => { this.setState({ bnLoading: 0 }); this.setState({ f: res.data }); })
+      .catch(e => { this.setState({ bnLoading: 0 }); console.log(e) })
 
 
-    
+
   }
   disapprove = (id) => {
     firebase.firestore().collection("problem").doc(id).update({
@@ -467,7 +532,7 @@ await this.setState({bnLoading:1})
     prob["series_id"] = this.state.series_id;
     prob["islive"] = true;
     temp["problem"] = prob;
-
+console.log(temp)
     axios({
       method: 'post',
       url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addProblem',
@@ -509,25 +574,26 @@ await this.setState({bnLoading:1})
 
         {/* <button className="btn btn-dark my-3" onClick={this.click}>Load Problems</button> */}
         <button class="btn btn-dark my-3 ml-4" type="button" onClick={this.click} >
- 
 
-  
-  Load Problems</button> 
+
+
+          Load Problems</button>
         {/* <button className="btn btn-dark my-3 mx-3" onClick={this.bnclick}>Load Bangla Problems</button> */}
 
         <button class="btn btn-primary my-3 ml-4" type="button" onClick={this.bnclick} >
- 
- {this.state.bnLoading==0?null:<><span class="spinner-grow spinner-grow-sm pr-2" role="status" aria-hidden="true"></span>
-  <span class="sr-only mr-2">Loading..</span></>}
-  
-  Load Bangla Problems</button>
+
+          {this.state.bnLoading == 0 ? null : <><span class="spinner-grow spinner-grow-sm pr-2" role="status" aria-hidden="true"></span>
+            <span class="sr-only mr-2">Loading..</span></>}
+
+          Load Bangla Problems</button>
         {this.state.f.map((prob, idx) => {
+     
           return (
             <div key={prob.doc_id} class="card mt-5" style={{ width: '20rem', margin: "auto" }} id={prob.doc_id}>
               <img src={prob.logo} className="img-fluid rounded-circle w-50 mb-3 m-auto" alt="..." />
               <div className="card-body">
                 <h2 className="card-title">{prob.title}</h2>
-                <p class="card-text" >Doc_Id -{prob.doc_id}</p>
+                <p class="card-text" >Problem Id -{prob.prob_id? prob.prob_id:prob.problem_id}</p>
 
                 <p class="card-text" id={"pendingText" + prob.doc_id} style={{ color: 'red' }} >{prob.isPending ? "Pending" : ''}</p>
                 <p>
@@ -535,6 +601,7 @@ await this.setState({bnLoading:1})
                   <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={'#collapse' + prob.doc_id} aria-expanded="false" aria-controls="collapseExample">
                     Details
                   </button>
+
                   {prob.translated !== true && prob.translated !== false ?
                     <button onClick={async () => { await this.setState({ currentProblem: prob }) }} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editProblem">
                       Edit
@@ -559,14 +626,36 @@ await this.setState({bnLoading:1})
                     <button onClick={() => this.delete(prob.prob_id, prob.doc_id)} className="btn btn-danger ml-3 pl-3">Delete</button> :
                     (<button className="btn btn-success ml-3 pl-3" type="button" data-toggle="collapse" data-target={'#collapse2' + prob.doc_id} aria-expanded="false" aria-controls="collapseExample" >Approve</button>)
                   }
+                 {
+                 prob.isPending ?null:(<> <button className="btn btn-primary ml-2 mt-5" type="button" data-toggle="collapse" data-target={'#collapse3' + prob.doc_id} aria-expanded="false" aria-controls="collapseExample" >Mapped Problem Id</button>
+                  <button onClick={()=>this.go(prob)} className="btn btn-primary ml-2 mt-5" type="button"  > Go </button>
+                 </> )
+                }
+                  <a id="prob_link" target="_blank"></a>
                 </p>
+                <div class="collapse" id={'collapse3' + prob.doc_id}>
+                  <div class="card card-body">
+                    <input onChange={(e) => this.setState({ mapped_id: e.target.value })} placeholder="Enter mapped problem id" type="text" class="form-control" name="mappedProblemId" />
+                    <button onClick={(e) => this.editMappedProblem(prob)} className="btn btn-primary py-3 my-3" >Submit</button>
+
+                  </div>
+                </div>
                 <div class="collapse" id={'collapse' + prob.doc_id}>
                   <div class="card card-body">
-                    <h4>AnsType :{prob.data.ansType}</h4>
-                    <h4>InteractiveType : {prob.data.interactiveType}</h4>
+                    <h6>AnsType :{prob.data.ansType}</h6>
+                    <h6>Setter : {prob.setter_name}</h6>
+                    <h6>Category: {prob.data.category} </h6>
+                    <h6>Grade: {prob.grade} </h6>
+                    <h6>InteractiveType : {prob.data.interactiveType}</h6>
                     <h6>Status : {prob.islive ? 'Approved' : 'Not Approved'}</h6>
-                    <h6>Grade : {prob.grade}</h6>
-                    <h6>ProblemId {prob.prob_id}</h6>
+                    <h6><b>Series_name</b> : {prob.series_name}</h6>
+                    <h6><b>Topic_name </b> : {prob.topic_name}</h6>
+                    <h6><b>Topic_level </b>: {prob.level_id-5}</h6>
+                    {
+                      prob.translated == true || prob.translated == false ? <h6>ProblemId : {prob.problem_id}</h6> : <h6>ProblemId : {prob.prob_id}</h6>
+
+                    }
+
                     {
                       prob.serial ? <h5>Serial:{prob.serial}</h5>
                         : null}
@@ -574,7 +663,7 @@ await this.setState({bnLoading:1})
                       prob.series_id ? <h5>Series Id: {prob.series_id}</h5> : null
                     }
 
-
+                    <h6>Mapped ProblemId {prob.associated_problem_id}</h6>
                   </div>
                 </div>
                 <div class="collapse" id={'collapse2' + prob.doc_id}>

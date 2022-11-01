@@ -57,7 +57,7 @@ nproblem:this.state.nproblem
   }
   axios({
     method: 'post',
-    url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editSeriesProblemCount',
+    url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editSeriesProblemCount',
     data: temp,
     headers:{
       'authorization':keys.authorization,

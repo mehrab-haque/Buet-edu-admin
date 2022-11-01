@@ -87,7 +87,7 @@ const temp={
 }
 axios({
   method: 'post',
-  url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/api/admin/topic/assignLevel',
+  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/topic/assignLevel',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -130,7 +130,7 @@ temp["topic"]=this.state;
 console.log(temp)
 axios({
   method: 'post',
-  url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/addTopic',
+  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addTopic',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -148,7 +148,7 @@ topic_id:id,
    }
    axios({
      method: 'post',
-     url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/editTopicProblemCount',
+     url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editTopicProblemCount',
      data: temp,
      headers:{
        'authorization':keys.authorization,
@@ -179,7 +179,7 @@ const temp={
 console.log(temp)
 axios({
   method: 'post',
-  url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/api/admin/addLevel',
+  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addLevel',
   data: temp,
   headers:{
     'authorization':keys.authorization,

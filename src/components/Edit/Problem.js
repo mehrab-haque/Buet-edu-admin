@@ -13,7 +13,7 @@ series_id:this.props.problem.series_id,
 title:this.props.problem.title,
 difficulty:this.props.problem.difficulty,
 isPremium:this.props.problem.isPremium,
-isLive:this.props.problem.isLive||this.props.problem.islive,
+isLive:this.props.problem.isLive,
 statement:this.props.problem.data.statement,
 explanation:this.props.problem.data.explanation,
 
