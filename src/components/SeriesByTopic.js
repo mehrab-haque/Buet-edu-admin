@@ -23,7 +23,7 @@ nproblem:nproblem
   }
   axios({
     method: 'post',
-    url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editSeriesProblemCount',
+    url: 'http://43.224.110.202/admin/editSeriesProblemCount',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -43,7 +43,7 @@ const submit=()=>{
 
 axios({
   method: 'post',
-  url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/addSeries',
+  url: 'http://43.224.110.202/admin/addSeries',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -58,7 +58,7 @@ axios({
 
 }
 const loadSerieses=()=>{
-axios.get('https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/topic/'+id,{
+axios.get('http://43.224.110.202/topic/'+id,{
 
 headers:{
 	'authorization':keys.authorization,

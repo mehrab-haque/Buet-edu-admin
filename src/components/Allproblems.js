@@ -27,6 +27,8 @@ class Allproblems extends Component {
     lang: "en",
     loading: 0,
     bnLoading: 0,
+    allLoading:0,
+UnMappedLoading:0,
     mapped_id: "",
     setters:[]
 
@@ -343,7 +345,8 @@ class Allproblems extends Component {
         temp["width"] = this.state.width
         t["data"] = temp;
         t["isLive"] = doc.data().isLive !== null || doc.data().isLive !== undefined ? doc.data().isLive : true;
-        t["isPremium"] = doc.data().isPremium !== null ? doc.data().isPremium : true;
+        t["isPremium"] = doc.data().isPremium !== null ? doc.data().isPremium : false;
+        t["is_for_test"] = doc.data().is_for_test !== null ? doc.data().is_for_test : false;
    
         p.push(t);
 
@@ -389,7 +392,7 @@ getName= (id) =>{
 
    let level=prob.level_id-5;
 
-let link=`https://brainspark-inner.netlify.app/lang/en/level/${level}/series/${prob.series_id}/problem/${prob.serial}`
+let link=`http://43.224.110.108/lang/en/level/${level}/series/${prob.series_id}/problem/${prob.serial}`
 console.log(link);
 const dom=document.getElementById("prob_link");;
 dom.href=link;
@@ -406,13 +409,19 @@ let data={problem_id_1:id1,problem_id_2:id2};
 
 axios({
   method: 'post',
-  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/associate/create',
+  url: 'http://43.224.110.202/admin/associate/create',
   data: data,
   headers: {
     'authorization': keys.authorization,
   }
 }).then(res=>{
   alert("Problem mapping successful");
+
+  firebase.firestore().collection("problem").doc(prob.doc_id).update({
+    associated_problem_id:id2
+  })
+
+
 
 }).catch(e=>{
   console.log(e);
@@ -426,7 +435,7 @@ axios({
 
     axios({
       method: 'get',
-      url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/getAllBanglaProblems',
+      url: 'http://43.224.110.202/admin/getAllBanglaProblems',
 
       headers: {
         'authorization': keys.authorization,
@@ -437,6 +446,39 @@ axios({
 
 
   }
+
+
+ UnMappedClick = async () => {
+    await this.setState({ UnMappedLoading: 1 })
+   
+
+    axios({
+      method: 'get',
+      url: 'http://43.224.110.202/admin/getAllProblems',
+
+      headers: {
+        'authorization': keys.authorization,
+        
+      }
+    }).then(res => { console.log(res.data); this.setState({ UnMappedLoading: 0 } ); 
+
+var a=res.data.filter(function(item)
+ {
+  return item.associated_problem_id==null;
+ });
+
+a.sort(function(x, y){
+  return -x.timestp + y.timestp;
+})
+this.setState({ f: a });
+ })
+      .catch(e => { this.setState({ UnMappedLoading: 0 }); console.log(e) })
+
+
+
+  }
+
+
   disapprove = (id) => {
     firebase.firestore().collection("problem").doc(id).update({
       isApproved: false
@@ -456,7 +498,7 @@ axios({
     data["problem_id"] = id;
     axios({
       method: 'post',
-      url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/deleteProblem',
+      url: 'http://43.224.110.202/admin/deleteProblem',
       data: data,
       headers: {
         'authorization': keys.authorization,
@@ -535,7 +577,7 @@ axios({
 console.log(temp)
     axios({
       method: 'post',
-      url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addProblem',
+      url: 'http://43.224.110.202/admin/addProblem',
       data: temp,
       headers: {
         'authorization': keys.authorization,
@@ -571,11 +613,11 @@ console.log(temp)
 
 
         <p style={{ cursor: 'pointer' }} onClick={() => this.searchText("waiting")}>Waiting Queue({c})</p>
-
+       
         {/* <button className="btn btn-dark my-3" onClick={this.click}>Load Problems</button> */}
         <button class="btn btn-dark my-3 ml-4" type="button" onClick={this.click} >
 
-
+        
 
           Load Problems</button>
         {/* <button className="btn btn-dark my-3 mx-3" onClick={this.bnclick}>Load Bangla Problems</button> */}
@@ -586,6 +628,12 @@ console.log(temp)
             <span class="sr-only mr-2">Loading..</span></>}
 
           Load Bangla Problems</button>
+  <button class="btn btn-dark my-3 ml-4" type="button" onClick={this.UnMappedClick} >
+
+ {this.state.UnMappedLoading == 0 ? null : <><span class="spinner-grow spinner-grow-sm pr-2" role="status" aria-hidden="true"></span>
+            <span class="sr-only mr-2">Loading..</span></>}
+
+          Load UnMapped Problems</button>
         {this.state.f.map((prob, idx) => {
      
           return (
@@ -613,12 +661,7 @@ console.log(temp)
                         Edit
                       </button></Link>)
                   }
-                  {this.state.currentProblem && (this.state.currentProblem.translated !== true && this.state.currentProblem.translated !== false) &&
-                    <Problem problem={this.state.currentProblem} setCurrentProbToNull={this.setCurrentProbToNull} />
-
-
-
-                  }
+                  
 
 
 
@@ -650,6 +693,7 @@ console.log(temp)
                     <h6>Status : {prob.islive ? 'Approved' : 'Not Approved'}</h6>
                     <h6><b>Series_name</b> : {prob.series_name}</h6>
                     <h6><b>Topic_name </b> : {prob.topic_name}</h6>
+                    <h6><b>Doc_Id </b> : {prob.doc_id}</h6>
                     <h6><b>Topic_level </b>: {prob.level_id-5}</h6>
                     {
                       prob.translated == true || prob.translated == false ? <h6>ProblemId : {prob.problem_id}</h6> : <h6>ProblemId : {prob.prob_id}</h6>
@@ -686,6 +730,12 @@ console.log(temp)
           )
 
         })}
+        {this.state.currentProblem && (this.state.currentProblem.translated !== true && this.state.currentProblem.translated !== false) &&
+                    <Problem problem={this.state.currentProblem} setCurrentProbToNull={this.setCurrentProbToNull} />
+
+
+
+                  }
         <div>
 
         </div>

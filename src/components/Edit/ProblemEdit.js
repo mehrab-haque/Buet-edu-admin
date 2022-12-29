@@ -28,6 +28,8 @@ class ProblemEdit extends Component {
     explanation:this.props.location.myProps? this.props.location.myProps.problem.data.explanation:"",
     restriction:this.props.location.myProps? this.props.location.myProps.problem.data.restriction:"",
     restrictions: "",
+    is_for_test:this.props.location.myProps? this.props.location.myProps.problem.is_for_test === undefined ? false : this.props.location.myProps.problem.is_for_test:"",
+
     hint:this.props.location.myProps? this.props.location.myProps.problem.data.hint:"",
     hints: "",
     innerData:this.props.location.myProps?this.props.location.myProps.problem.data.data:"",
@@ -87,12 +89,12 @@ class ProblemEdit extends Component {
     temp["difficulty"] = this.state.difficulty;
     temp["ispremium"] = this.state.ispremium;
     temp["islive"] = this.state.isLive;
-
+temp["is_for_test"]=this.state.is_for_test;
     final["problem"] = temp;
     console.log(final)
     axios({
       method: 'post',
-      url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editProblem',
+      url: 'http://43.224.110.202/admin/editProblem',
       data: final,
       headers: {
         'authorization': keys.authorization,
@@ -109,7 +111,9 @@ class ProblemEdit extends Component {
         isPending: false,
         isPremium: this.state.isPremium ? this.state.isPremium : false,
         isLive: this.state.isLive,
-        islive: this.state.isLive
+        islive: this.state.isLive,
+
+        is_for_test:this.state.is_for_test
 
 
 
@@ -148,6 +152,7 @@ await this.setState({loading:1})
 
     temp["ispremium"] = this.state.ispremium;
     temp["islive"] = this.state.isLive;
+    temp["is_for_test"]=this.state.is_for_test;
     temp["data"]["description"] = this.state.description;
     temp["data"]["statement"] = this.state.statement;
     temp["data"]["explanation"] = this.state.explanation;
@@ -161,7 +166,7 @@ await this.setState({loading:1})
     console.log(final)
     axios({
       method: 'post',
-      url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editProblem',
+      url: 'http://43.224.110.202/admin/editProblem',
       data: final,
       headers: {
         'authorization': keys.authorization,
@@ -276,6 +281,24 @@ await this.setState({loading:1})
                 <input onClick={(e) => this.setState({ isLive: !this.state.isLive })} class="form-check-input" type="checkbox" value={this.state.isLive} id="flexCheckDefault2" />
                 <label class="form-check-label" for="flexCheckDefault2">
                   IsLive
+                </label>
+              </div>
+            )
+          }
+          {this.state.is_for_test ?
+            (
+              <div class="form-check">
+                <input onClick={(e) => this.setState({ is_for_test: !this.state.is_for_test})} class="form-check-input" type="checkbox" value={this.state.is_for_test} id="flexCheckDefault3" checked />
+                <label class="form-check-label" for="flexCheckDefault3">
+                  IsForTest
+                </label>
+              </div>
+            ) :
+            (
+              <div class="form-check">
+                <input onClick={(e) => this.setState({ is_for_test: !this.state.is_for_test })} class="form-check-input" type="checkbox" value={this.state.is_for_test} id="flexCheckDefault3" />
+                <label class="form-check-label" for="flexCheckDefault3">
+                  IsForTest
                 </label>
               </div>
             )

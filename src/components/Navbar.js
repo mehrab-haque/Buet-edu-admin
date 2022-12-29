@@ -26,8 +26,20 @@ return (
       <li class="nav-item active">
         <a class="nav-link" href="/allSerieses" >Serieses<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item active">
+      {/* <li class="nav-item active">
         <a class="nav-link" href="/allProblems" >Problems<span class="sr-only">(current)</span></a>
+      </li> */}
+         <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Problems
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/allProblems" >All Problems</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/probStats">Stats</a>
+       
+        
+        </div>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="/allTests" >Tests<span class="sr-only">(current)</span></a>

@@ -24,7 +24,7 @@ const delete2=(id,doc_id)=>{
   data["problem_id"]=id;
   axios({
     method: 'post',
-    url: 'https://0jymup9y4j.execute-api.ap-south-1.amazonaws.com/d/admin/deleteProblem',
+    url: 'http://43.224.110.202/admin/deleteProblem',
     data: data,
     headers:{
       'authorization':keys.authorization,
@@ -52,7 +52,7 @@ temp["problem"]=prob;
 console.log(temp)
 axios({
     method: 'post',
-    url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addProblem',
+    url: 'http://43.224.110.202/admin/addProblem',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -77,7 +77,7 @@ axios({
 
 }
 const loadProblems=()=>{
-axios.get('https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/series/'+id,{
+axios.get('http://43.224.110.202/series/'+id,{
 
 headers:{
 	'authorization':keys.authorization,

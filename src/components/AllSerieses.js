@@ -57,7 +57,7 @@ nproblem:this.state.nproblem
   }
   axios({
     method: 'post',
-    url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editSeriesProblemCount',
+    url: 'http://43.224.110.202/admin/editSeriesProblemCount',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -77,7 +77,7 @@ submit=()=>{
 
 axios({
   method: 'post',
-  url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/addSeries',
+  url: 'http://43.224.110.202/admin/addSeries',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -116,7 +116,7 @@ render(){
     return (
 <div>
 <Navbar fun={this.searchText}/> 
-<button type="button" className="btn btn-outline-success btn-lg mt-3" data-toggle="modal" data-target="#exampleModalLong">
+<button type="button" className="btn btn-outline-success btn-lg mt-3 mx-3" data-toggle="modal" data-target="#exampleModalLong">
  Add Series
 </button>
 
@@ -185,13 +185,13 @@ return (
     <p class="card-text">{series.description}</p>
     <p>
 
-  <button className="btn btn-primary" type="button" data-toggle="collapse" data-target={'#collapse'+series.series_id}  aria-expanded="false" aria-controls="collapseExample">
+  <button className="btn btn-primary mx-2" type="button" data-toggle="collapse" data-target={'#collapse'+series.series_id}  aria-expanded="false" aria-controls="collapseExample">
      Details
   </button>
-  <button onClick={async()=>{await this.setState({currentSeries:series})}} type="button" className="btn btn-info ml-3" data-toggle="modal" data-target="#editSeries">
+  <button onClick={async()=>{await this.setState({currentSeries:series})}} type="button" className="btn btn-info ml-3 mx-2" data-toggle="modal" data-target="#editSeries">
  Edit
 </button> 
-<button type="button" className="btn btn-primary ml-3" data-toggle="collapse" data-target={'#collapse2'+series.series_id}>
+<button type="button" className="btn btn-primary ml-3 mx-2" data-toggle="collapse" data-target={'#collapse2'+series.series_id}>
  nProblems
 </button> 
 <Link to={{

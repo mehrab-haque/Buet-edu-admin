@@ -16,9 +16,13 @@ isPremium:this.props.problem.isPremium,
 isLive:this.props.problem.isLive,
 statement:this.props.problem.data.statement,
 explanation:this.props.problem.data.explanation,
+is_for_test:this.props.problem.is_for_test!=null?this.props.problem.is_for_test:false
 
 
+    }
+    componentDidMount(){
 
+      console.log(this.props.problem)
     }
     problemChange=(e)=>{
 
@@ -39,12 +43,13 @@ explanation:this.props.problem.data.explanation,
         temp["difficulty"]=this.state.difficulty;
         temp["isPremium"]=this.state.isPremium;
         temp["islive"]=this.state.isLive;
+        temp["is_for_test"]=this.state.is_for_test;
       
         final["problem"]=temp;
        console.log(final)
        axios({
         method: 'post',
-        url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editProblem',
+        url: 'http://43.224.110.202/admin/editProblem',
         data: final,
         headers:{
           'authorization':keys.authorization,
@@ -61,7 +66,8 @@ explanation:this.props.problem.data.explanation,
           isPending:false,
           isPremium:this.state.isPremium?this.state.isPremium:false,
           isLive:this.state.isLive,
-         islive:true
+         islive:true,
+         is_for_test:this.state.is_for_test
 
 
   
@@ -155,7 +161,28 @@ explanation:this.props.problem.data.explanation,
 </div>  
 )
 }
+
+  
+{this.state.is_for_test?
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({is_for_test:!this.state.is_for_test})} class="form-check-input" type="checkbox" value={this.state.is_for_test} id="flexCheckDefault3" checked />
+  <label class="form-check-label" for="flexCheckDefault3">
+  IsForTest
+  </label>
+</div>  
+):
+(
+<div class="form-check">
+  <input onClick={(e)=>this.setState({is_for_test:!this.state.is_for_test})} class="form-check-input" type="checkbox" value={this.state.is_for_test} id="flexCheckDefault3" />
+  <label class="form-check-label" for="flexCheckDefault3">
+  IsForTest
+  </label>
+</div>  
+)
+}
     
+   
   
 </form>
 

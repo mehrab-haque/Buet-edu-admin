@@ -27,7 +27,7 @@ post=()=>{
 
   axios({
     method: 'post',
-    url: 'https://zo3aw6p85g.execute-api.us-east-2.amazonaws.com/production/admin/editTopic',
+    url: 'http://43.224.110.202/admin/editTopic',
     data: temp,
     headers:{
       'authorization':keys.authorization,
