@@ -8,6 +8,7 @@ import axios from "axios"
 import Problem from "./Edit/Problem"
 import ProblemEdit from "./Edit/ProblemEdit"
 import Navbar from "./Navbar"
+import {link} from "../base_url"
 import { Link } from "react-router-dom"
 var c = 0;
 
@@ -409,7 +410,7 @@ let data={problem_id_1:id1,problem_id_2:id2};
 
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/associate/create',
+  url: link.url+'admin/associate/create',
   data: data,
   headers: {
     'authorization': keys.authorization,
@@ -435,7 +436,7 @@ axios({
 
     axios({
       method: 'get',
-      url: 'http://43.224.110.202/admin/getAllBanglaProblems',
+      url: link.url+'admin/getAllBanglaProblems',
 
       headers: {
         'authorization': keys.authorization,
@@ -454,7 +455,7 @@ axios({
 
     axios({
       method: 'get',
-      url: 'http://43.224.110.202/admin/getAllProblems',
+      url: link.url+'admin/getAllProblems',
 
       headers: {
         'authorization': keys.authorization,
@@ -498,7 +499,7 @@ this.setState({ f: a });
     data["problem_id"] = id;
     axios({
       method: 'post',
-      url: 'http://43.224.110.202/admin/deleteProblem',
+      url: link.url+'admin/deleteProblem',
       data: data,
       headers: {
         'authorization': keys.authorization,
@@ -577,7 +578,7 @@ this.setState({ f: a });
 console.log(temp)
     axios({
       method: 'post',
-      url: 'http://43.224.110.202/admin/addProblem',
+      url: link.url+'admin/addProblem',
       data: temp,
       headers: {
         'authorization': keys.authorization,

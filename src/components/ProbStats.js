@@ -2,6 +2,7 @@ import React,{useState,useEffect} from "react"
 import {useSelector} from "react-redux"
 import Navbar from "./Navbar"
 import axios from "axios"
+import {link} from "../base_url"
 import "../App.css"
 import { keys } from "../keys"
 const ProbStats=()=>{
@@ -78,7 +79,7 @@ document.getElementById("2").classList.remove("active");
 
         axios({
             method: 'get',
-            url: 'http://43.224.110.202/admin/getLevelsTopicsSeries',
+            url: link.url+'admin/getLevelsTopicsSeries',
       
             headers: {
               'authorization': keys.authorization,

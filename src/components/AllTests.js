@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { keys } from "../keys"
 import axios from "axios"
 import {useParams} from "react-router-dom"
+import {link} from "../base_url"
 
 const AllTests = () => {
 
@@ -19,7 +20,7 @@ let data={name:name,lang:lang,level_id:level,type:type}
 
 axios({
     method: 'post',
-    url: 'http://43.224.110.202/api/tests',
+    url: link.url+'api/tests',
     data: data,
     headers:{
       'authorization':keys.authorization,
@@ -34,7 +35,7 @@ const load=()=>{
 
     axios({
         method: 'get',
-        url: 'http://43.224.110.202/api/tests',
+        url: link.url+'api/tests',
   
         headers: {
           'authorization': keys.authorization,

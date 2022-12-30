@@ -7,6 +7,7 @@ import Ajv from "ajv";
 import ace from "brace";
 import "brace/mode/json";
 import "brace/theme/github";
+import {link} from "../../base_url";
 import { JsonEditor as Editor } from "jsoneditor-react";
 import "jsoneditor-react/es/editor.min.css";
 
@@ -94,7 +95,7 @@ temp["is_for_test"]=this.state.is_for_test;
     console.log(final)
     axios({
       method: 'post',
-      url: 'http://43.224.110.202/admin/editProblem',
+      url: link.url+'admin/editProblem',
       data: final,
       headers: {
         'authorization': keys.authorization,
@@ -166,7 +167,7 @@ await this.setState({loading:1})
     console.log(final)
     axios({
       method: 'post',
-      url: 'http://43.224.110.202/admin/editProblem',
+      url: link.url+'admin/editProblem',
       data: final,
       headers: {
         'authorization': keys.authorization,

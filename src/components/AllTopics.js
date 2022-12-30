@@ -8,7 +8,7 @@ import Topic from "./Edit/Topic"
 import { useHistory } from "react-router-dom";
 import {connect} from "react-redux"
 import Navbar from "./Navbar"
-
+import {link} from "../base_url"
 class AllTopics extends Component{
 
 state={
@@ -87,7 +87,7 @@ const temp={
 }
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/topic/assignLevel',
+  url: link.url+'/admin/topic/assignLevel',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -105,7 +105,7 @@ else{
 }
 loadTopics=()=>{
 
-axios.get('http://43.224.110.202/topics/'+this.state.lang,{
+axios.get(link.url+'topics/'+this.state.lang,{
 
 headers:{
 	'authorization':keys.authorization,
@@ -130,7 +130,7 @@ temp["topic"]=this.state;
 console.log(temp)
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/addTopic',
+  url: link.url+'/admin/addTopic',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -148,7 +148,7 @@ topic_id:id,
    }
    axios({
      method: 'post',
-     url: 'http://43.224.110.202/admin/editTopicProblemCount',
+     url: link.url+'/admin/editTopicProblemCount',
      data: temp,
      headers:{
        'authorization':keys.authorization,
@@ -179,7 +179,7 @@ const temp={
 console.log(temp)
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/addLevel',
+  url: link.url+'/admin/addLevel',
   data: temp,
   headers:{
     'authorization':keys.authorization,

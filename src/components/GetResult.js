@@ -2,6 +2,7 @@ import React,{useState,useEffect} from "react"
 import Navbar from "./Navbar";
 import { keys } from "../keys"
 import axios from "axios"
+import {link} from "../base_url"
 import {useParams} from "react-router-dom"
 
 const GetResult = () => {
@@ -16,7 +17,7 @@ console.log(data);
 
   axios({
     method: 'post',
-    url: 'http://43.224.110.202/api/tests/'+test_id+'/leaderboard',
+    url: link.url+'api/tests/'+test_id+'/leaderboard',
    data:data,
     headers: {
       'authorization': keys.authorization,
@@ -46,7 +47,7 @@ setUserIds(checkedValue);
 console.log(test_id)
         axios({
             method: 'get',
-            url: 'http://43.224.110.202/api/tests/'+test_id+'/users/marks',
+            url: link.url+'api/tests/'+test_id+'/users/marks',
         
             headers: {
               'authorization': keys.authorization,

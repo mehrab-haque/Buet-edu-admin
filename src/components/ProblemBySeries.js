@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom"
 import Series from "./Edit/Series"
 import {Link} from "react-router-dom"
 import firebase from "../firebase"
+import {link} from "../base_url"
 import Problem from "./Edit/Problem"
 const ProblemBySeries = (props) => {
  
@@ -24,7 +25,7 @@ const delete2=(id,doc_id)=>{
   data["problem_id"]=id;
   axios({
     method: 'post',
-    url: 'http://43.224.110.202/admin/deleteProblem',
+    url: link.url+'admin/deleteProblem',
     data: data,
     headers:{
       'authorization':keys.authorization,
@@ -52,7 +53,7 @@ temp["problem"]=prob;
 console.log(temp)
 axios({
     method: 'post',
-    url: 'http://43.224.110.202/admin/addProblem',
+    url: link.url+'admin/addProblem',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -77,7 +78,7 @@ axios({
 
 }
 const loadProblems=()=>{
-axios.get('http://43.224.110.202/series/'+id,{
+axios.get(link.url+'series/'+id,{
 
 headers:{
 	'authorization':keys.authorization,

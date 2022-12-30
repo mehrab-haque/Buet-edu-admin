@@ -1,6 +1,7 @@
 import React,{Component} from "react"
 import axios from "axios"
 import {keys} from "../../keys"
+import {link} from "../../base_url"
 class Series extends Component{
 
     state={
@@ -25,7 +26,7 @@ series_id:this.props.series.series_id
       console.log(temp)
       axios({
         method: 'post',
-        url: 'http://43.224.110.202/admin/editSeries',
+        url: link.url+'admin/editSeries',
         data: temp,
         headers:{
           'authorization':keys.authorization,

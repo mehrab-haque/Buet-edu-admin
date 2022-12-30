@@ -1,6 +1,7 @@
 import React,{Component} from "react"
 import axios from "axios"
 import {keys} from "../../keys"
+import {link} from "../../base_url"
 class Topic extends Component{
 
     state={
@@ -27,7 +28,7 @@ post=()=>{
 
   axios({
     method: 'post',
-    url: 'http://43.224.110.202/admin/editTopic',
+    url: link.url+'admin/editTopic',
     data: temp,
     headers:{
       'authorization':keys.authorization,

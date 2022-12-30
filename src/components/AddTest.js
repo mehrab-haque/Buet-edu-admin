@@ -4,6 +4,7 @@ import { keys } from "../keys"
 import axios from "axios"
 import {useParams} from "react-router-dom"
 import DatePicker from "react-datepicker";
+import {link} from "../base_url"
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -37,7 +38,7 @@ const edit=(prob_id)=>{
 
   axios({
     method: 'put',
-    url: 'http://43.224.110.202/api/tests/'+test_id+"/problems/"+prob_id,
+    url: link.url+'api/tests/'+test_id+"/problems/"+prob_id,
     data: {marks:parseInt(marksForProblem)},
     headers:{
       'authorization':keys.authorization,
@@ -68,7 +69,7 @@ test_id:+test_id,
   console.log(data,o_id)
   axios({
   method: 'put',
-  url: 'http://43.224.110.202/api/tests/'+o_id+'/properties',
+  url: link.url+'api/tests/'+o_id+'/properties',
  data:data,
   headers: {
     'authorization': keys.authorization,
@@ -87,7 +88,7 @@ let data={
 }
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/api/tests/'+test_id+'/properties',
+  url: link.url+'api/tests/'+test_id+'/properties',
  data:data,
   headers: {
     'authorization': keys.authorization,
@@ -115,7 +116,7 @@ status:status
 
 axios({
   method: 'put',
-  url: 'http://43.224.110.202/api/tests/'+test_id,
+  url: link.url+'api/tests/'+test_id,
   data: data,
   headers:{
     'authorization':keys.authorization,
@@ -132,7 +133,7 @@ const levelClick=(text)=>{
   let l=parseInt(level)+5;
   axios({
     method: 'get',
-    url: 'http://43.224.110.202/admin/getTopicsAndProblems?level_id='+l,
+    url: link.url+'admin/getTopicsAndProblems?level_id='+l,
 
     headers: {
       'authorization': keys.authorization,
@@ -174,7 +175,7 @@ let data={
  console.log(data);
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/api/tests/'+test_id+'/problems',
+  url: link.url+'api/tests/'+test_id+'/problems',
  data:data,
   headers: {
     'authorization': keys.authorization,
@@ -318,7 +319,7 @@ obj[test.data[0].TestProblemDistributions[2].Topic.name]=test.data[0].TestProble
  
   axios({
     method: 'put',
-    url: 'http://43.224.110.202/api/tests/problemDistribution/'+obj['Logical Reasoning'],
+    url: link.url+'api/tests/problemDistribution/'+obj['Logical Reasoning'],
    data:{"problem_count":parseInt(LogicalProblem)},
     headers: {
       'authorization': keys.authorization,
@@ -327,7 +328,7 @@ obj[test.data[0].TestProblemDistributions[2].Topic.name]=test.data[0].TestProble
 
     axios({
       method: 'put',
-      url: 'http://43.224.110.202/api/tests/problemDistribution/'+obj['Math'],
+      url: link.url+'api/tests/problemDistribution/'+obj['Math'],
      data:{"problem_count":parseInt(MathProblem)},
       headers: {
         'authorization': keys.authorization,
@@ -376,7 +377,7 @@ setDataProb(test.data[0].TestProblems);
 console.log(test_id)
   axios({
     method: 'get',
-    url: 'http://43.224.110.202/api/tests/'+test_id,
+    url: link.url+'api/tests/'+test_id,
 
     headers: {
       'authorization': keys.authorization,

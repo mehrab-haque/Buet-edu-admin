@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import {useParams} from "react-router-dom"
 import axios from "axios"
 import {keys} from "../keys"
+import {link} from "../base_url"
 const GetTest=(props)=>{
 const {test_id}=useParams();
 
@@ -14,7 +15,7 @@ const edit=(prob_id)=>{
 
   axios({
     method: 'put',
-    url: 'http://43.224.110.202/api/tests/'+test_id+"/problems/"+prob_id,
+    url: link.url+'api/tests/'+test_id+"/problems/"+prob_id,
     data: {marks:parseInt(marks)},
     headers:{
       'authorization':keys.authorization,
@@ -34,7 +35,7 @@ const edit=(prob_id)=>{
 
   axios({
     method: 'get',
-    url: 'http://43.224.110.202/api/tests/'+test_id,
+    url: link.url+'api/tests/'+test_id,
    
     headers: {
       'authorization': keys.authorization,

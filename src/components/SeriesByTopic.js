@@ -5,6 +5,7 @@ import {keys} from "../keys"
 import {useParams} from "react-router-dom"
 import Series from "./Edit/Series"
 import {Link} from "react-router-dom"
+import {link} from "../base_url"
 const SeriesByTopic = (props) => {
  
  const [des,setDes]=useState('');
@@ -23,7 +24,7 @@ nproblem:nproblem
   }
   axios({
     method: 'post',
-    url: 'http://43.224.110.202/admin/editSeriesProblemCount',
+    url: link.url+'admin/editSeriesProblemCount',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -43,7 +44,7 @@ const submit=()=>{
 
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/addSeries',
+  url: link.url+'admin/addSeries',
   data: temp,
   headers:{
     'authorization':keys.authorization,
@@ -58,7 +59,7 @@ axios({
 
 }
 const loadSerieses=()=>{
-axios.get('http://43.224.110.202/topic/'+id,{
+axios.get(link.url+'topic/'+id,{
 
 headers:{
 	'authorization':keys.authorization,

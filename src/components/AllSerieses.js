@@ -7,6 +7,7 @@ import {connect} from "react-redux"
 import Series from "./Edit/Series"
 import Navbar from "./Navbar"
 import {Link} from "react-router-dom"
+import {link} from "../base_url"
 class AllSerieses extends Component{
 state={
 
@@ -57,7 +58,7 @@ nproblem:this.state.nproblem
   }
   axios({
     method: 'post',
-    url: 'http://43.224.110.202/admin/editSeriesProblemCount',
+    url: link.url+'admin/editSeriesProblemCount',
     data: temp,
     headers:{
       'authorization':keys.authorization,
@@ -77,7 +78,7 @@ submit=()=>{
 
 axios({
   method: 'post',
-  url: 'http://43.224.110.202/admin/addSeries',
+  url: link.url+'admin/addSeries',
   data: temp,
   headers:{
     'authorization':keys.authorization,
