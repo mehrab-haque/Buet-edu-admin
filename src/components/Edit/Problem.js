@@ -2,6 +2,7 @@ import React,{Component} from "react"
 import axios from "axios"
 import {keys} from "../../keys"
 import firebase from "../../firebase"
+import {link} from "../../base_url"
 class Problem extends Component{
 
     state={
@@ -49,7 +50,7 @@ is_for_test:this.props.problem.is_for_test!=null?this.props.problem.is_for_test:
        console.log(final)
        axios({
         method: 'post',
-        url: 'http://43.224.110.202/admin/editProblem',
+        url: link.url+'admin/editProblem',
         data: final,
         headers:{
           'authorization':keys.authorization,
