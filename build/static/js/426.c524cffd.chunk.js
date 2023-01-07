@@ -1,0 +1,2 @@
+(this.webpackJsonpadmin=this.webpackJsonpadmin||[]).push([[426],{639:function(a,n){!function(a){var n=a.util.clone(a.languages.typescript);a.languages.tsx=a.languages.extend("jsx",n);var e=a.languages.tsx.tag;e.pattern=RegExp(/(^|[^\w$]|(?=<\/))/.source+"(?:"+e.pattern.source+")",e.pattern.flags),e.lookbehind=!0}(Prism)}}]);
+//# sourceMappingURL=426.c524cffd.chunk.js.map

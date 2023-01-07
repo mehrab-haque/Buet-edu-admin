@@ -1,0 +1,2 @@
+(this.webpackJsonpadmin=this.webpackJsonpadmin||[]).push([[111],{324:function(n,t){Prism.languages.editorconfig={comment:/[;#].*/,section:{pattern:/(^[ \t]*)\[.+]/m,lookbehind:!0,alias:"keyword",inside:{regex:/\\\\[\[\]{},!?.*]/,operator:/[!?]|\.\.|\*{1,2}/,punctuation:/[\[\]{},]/}},property:{pattern:/(^[ \t]*)[^\s=]+(?=[ \t]*=)/m,lookbehind:!0},value:{pattern:/=.*/,alias:"string",inside:{punctuation:/^=/}}}}}]);
+//# sourceMappingURL=111.d21948bb.chunk.js.map
